@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './App.css';
-import meditationBackground from './image2.jpg';
+import CherishDesign from "./components/landing";
+// import meditationBackground from './image2.jpg';
 
 function App() {
     const [memory, setMemory] = useState("");  // State for memory input
@@ -35,7 +36,7 @@ function App() {
         <div
             className="App"
             style={{
-                backgroundImage: `url(${meditationBackground})`,  // Set background image
+                // backgroundImage: `url(${meditationBackground})`,  // Set background image
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 minHeight: '100vh',
@@ -46,8 +47,13 @@ function App() {
                 textAlign: 'center',
                 color: 'white',
                 padding: '20px',
+                fontFamily: 'Times New Roman'
             }}
         >
+
+            {/* <div>
+                <CherishDesign />
+            </div> */}
             <h1>CHERISH</h1>
 
             {/* Memory input box */}
@@ -68,7 +74,7 @@ function App() {
             {response && (
                 <div>
                     {/* <h2>GPT Response:</h2> */}
-                    <p>{response}</p>
+                    <p className="response">{response}</p>
                 </div>
             )}
         </div>
