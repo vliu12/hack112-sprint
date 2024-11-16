@@ -5,6 +5,14 @@ import cherishlogo from './CHERISH..png'
 import background from './background1.png';
 import cherishicon from './Subtract.png'
 import rectangle from './rectangle.png'
+import navdesign from './rectangle.png'
+import memories from './memoriespage.js'
+import Navbar from './Navbar'
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+} from "react-router-dom";
 
 function App() {
     const [memory, setMemory] = useState("");  // State for memory input
@@ -18,6 +26,8 @@ function App() {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        setResponse("");
 
         // Send the memory input to the Flask backend
         try {
@@ -36,27 +46,22 @@ function App() {
     };
 
     return (
+
         <div
             className="App"
             style={{
                 backgroundImage: `url(${background})`,  // Set background image
-            //     backgroundSize: 'cover',
-            //     backgroundPosition: 'center',
-            //     minHeight: '100vh',
-            //     display: 'flex',
-            //     flexDirection: 'column',
-            //     justifyContent: 'center',
-            //     alignItems: 'center',
-            //     textAlign: 'center',
-            //     color: 'white',
-            //     padding: '20px',
-            //     fontFamily: 'Times New Roman'
             }}
         >
+        
+        {/* <Navbar /> Add Navbar here */}
+
 
         <img id="cherishLogo" src={cherishlogo} alt="cherish logo" />
         <img id="cherishID" src={cherishicon} alt="cherish icon" />
         <img id="rectangle" src={rectangle} alt="rectangle" />
+        <img id="navdesign" src={navdesign} alt="navdesign" />
+ 
 
 
 
@@ -66,13 +71,14 @@ function App() {
             {/* <h1>CHERISH</h1> */}
 
             {/* Memory input box */}
-            <label>
+            <label className = "label">
                 What did you do today?
                 <input
                     type="text"
                     value={memory}
                     onChange={handleMemoryChange}
-                    placeholder="I spent time with my family..."
+                    placeholder="Type here!"
+                    className = "input-text"
                 />
             </label>
 
@@ -84,6 +90,7 @@ function App() {
                 <div>
                     {/* <h2>GPT Response:</h2> */}
                     <p className="response">{response}</p>
+                    
                 </div>
             )}
         </div>

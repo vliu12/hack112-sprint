@@ -6,26 +6,46 @@ import random
 app = Flask(__name__)
 CORS(app)
 
+memories = []
+
+
 # Set your OpenAI API key (make sure to keep it secure)
-openai.api_key = "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"
+openai.api_key = "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"
 
 def answerUser(input):
     # Create the prompt
-    prompt = f"The user you are communicating with has Alzheimer's. Write a response to '{input}' that asks the user for more details, as if having a conversation."
+    # response = requests.post('http://localhost:5000/prompt-generator')  # Assuming Flask is running on localhost:5000
+    # if response.status_code == 200:
+    #      prompt_data = response.json()
+    #      prompt = prompt_data['prompt']
+    # else:
+    #      return "Error fetching prompt."
+
+    # Combine the generated prompt with the user input for the OpenAI model
+    prompt_content = (
+    "The user you are communicating with has Alzheimer's. Based on the input: "
+    f"'{input}', craft a kind, engaging, and stimulating response. The initial prompt it 'what did you do today', so the memory you're prompting should be the one of that day. Ask the user a "
+    "specific question related to the topic to encourage detailed recollection. "
+    "Keep the tone empathetic and conversational. Ensure the questions are specific but don't ask the same questions, just "
+    "enough to guide the user toward a cohesive memory. If the response seems off-topic, "
+    "gently redirect with a different phrasing or approach. Limit the response to 12 words."
+    )
+
 
     try:
-        response = openai.ChatCompletion.create(
+        openai_response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": prompt_content}],
         )
-        
-        # Extract the response text
-        answer = response.choices[0].message.content
+
+        # Extract the response text from OpenAI
+        answer = openai_response.choices[0].message.content
         return answer
 
     except Exception as e:
         print(f"Error with OpenAI API: {e}")
-        return "Sorry, there was an error with processing your request."
+        return "Sorry, there was an error processing your request."
+
 
 @app.route('/prompt-generator', methods=['POST'])
 def generatePrompt():
@@ -71,14 +91,35 @@ def generatePrompt():
         "What would you name today if it were a chapter in your life story?"
     ]
     
-    index = random.randint(0, len(promptList) - 1) 
+    index = random.randint(0, len(promptList) - 1)
     return jsonify({"prompt": promptList[index]})
 
+def getBigMemory(memories):
+    prompt = f"using what you know from the users memories of one event, which are {memories}, create one cohesive memory similar to that of a journal entry that is no more than 80 words which will allow the user to fondly remember this memory. The user has Alzheimer's."
 
+    try:
+        openai_response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+        )
+
+        # Extract the response text from OpenAI
+        answer = openai_response.choices[0].message.content
+        return answer
+
+    except Exception as e:
+        print(f"Error with OpenAI API: {e}")
+        return "Sorry, there was an error processing your request." 
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
     user_input = request.json.get('memory')  # Get memory input from React frontend
+
+    memories.append(user_input)
+    print(memories)
+
+    if len(memories)%10 == 0:
+        bigMemory = getBigMemory(memories)
 
     response = answerUser(user_input)
     print(response)
