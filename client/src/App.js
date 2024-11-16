@@ -4,6 +4,7 @@ import './App.css';
 import cherishlogo from './CHERISH..png'
 import background from './background1.png';
 import cherishicon from './Subtract.png'
+import rectangle from './rectangle.png'
 
 function App() {
     const [memory, setMemory] = useState("");  // State for memory input
@@ -55,6 +56,7 @@ function App() {
 
         <img id="cherishLogo" src={cherishlogo} alt="cherish logo" />
         <img id="cherishID" src={cherishicon} alt="cherish icon" />
+        <img id="rectangle" src={rectangle} alt="rectangle" />
 
 
 
