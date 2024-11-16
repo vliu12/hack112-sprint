@@ -13,6 +13,23 @@
   color: white;
 }
 
+#cherishLogo {
+  position: absolute;
+  top: 20px; /* Adjust for spacing */
+  left: 20px; /* Adjust for spacing */
+  width: 203px;
+  height: 53px;
+  z-index: 10;
+}
+#cherishID {
+  position: absolute;
+  top: 20px; /* Distance from the top of the screen */
+  right: 20px; /* Distance from the right of the screen */
+  z-index: 10; /* Ensure it stays on top of other elements */
+}
+
+
+
 /* Circular background styling */
 .App::before,
 .App::after {
@@ -88,14 +105,12 @@ button:hover {
 
 /* Form container with shadow */
 form {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 400px;
-  box-sizing: border-box;
-  z-index: 1;
+  width: 895px;
+  height: 289px;
+  flex-shrink: 0;
+  border-radius: 100px;
+  background: #FFF;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.90);
 }
 
 /* Response text styling */

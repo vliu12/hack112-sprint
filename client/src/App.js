@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import './App.css';
-import CherishDesign from "./components/landing";
-// import meditationBackground from './image2.jpg';
+// import CherishDesign from "./components/landing";
+import cherishlogo from './CHERISH..png'
+import background from './background1.png';
+import cherishicon from './Subtract.png'
 
 function App() {
     const [memory, setMemory] = useState("");  // State for memory input
@@ -36,25 +38,30 @@ function App() {
         <div
             className="App"
             style={{
-                // backgroundImage: `url(${meditationBackground})`,  // Set background image
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                color: 'white',
-                padding: '20px',
-                fontFamily: 'Times New Roman'
+                backgroundImage: `url(${background})`,  // Set background image
+            //     backgroundSize: 'cover',
+            //     backgroundPosition: 'center',
+            //     minHeight: '100vh',
+            //     display: 'flex',
+            //     flexDirection: 'column',
+            //     justifyContent: 'center',
+            //     alignItems: 'center',
+            //     textAlign: 'center',
+            //     color: 'white',
+            //     padding: '20px',
+            //     fontFamily: 'Times New Roman'
             }}
         >
+
+        <img id="cherishLogo" src={cherishlogo} alt="cherish logo" />
+        <img id="cherishID" src={cherishicon} alt="cherish icon" />
+
+
 
             {/* <div>
                 <CherishDesign />
             </div> */}
-            <h1>CHERISH</h1>
+            {/* <h1>CHERISH</h1> */}
 
             {/* Memory input box */}
             <label>
