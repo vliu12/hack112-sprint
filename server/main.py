@@ -7,35 +7,33 @@ app = Flask(__name__)
 CORS(app)
 
 memories = []
+conversationHistory = []
+bigMemories = []
 
 
 # Set your OpenAI API key (make sure to keep it secure)
-openai.api_key = "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"
+openai.api_key = "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"
 
 def answerUser(input):
-    # Create the prompt
-    # response = requests.post('http://localhost:5000/prompt-generator')  # Assuming Flask is running on localhost:5000
-    # if response.status_code == 200:
-    #      prompt_data = response.json()
-    #      prompt = prompt_data['prompt']
-    # else:
-    #      return "Error fetching prompt."
 
-    # Combine the generated prompt with the user input for the OpenAI model
+    conversationHistory.append({"role": "user", "content": input})
+
+
     prompt_content = (
     "The user you are communicating with has Alzheimer's. Based on the input: "
-    f"'{input}', craft a kind, engaging, and stimulating response. The initial prompt it 'what did you do today', so the memory you're prompting should be the one of that day. Ask the user a "
+    f"'{input}', craft a kind, engaging, and stimulating response. The current conversation history is {conversationHistory}. The questions you're asking after should be the one of that same memory. Ask the user a "
     "specific question related to the topic to encourage detailed recollection. "
     "Keep the tone empathetic and conversational. Ensure the questions are specific but don't ask the same questions, just "
     "enough to guide the user toward a cohesive memory. If the response seems off-topic, "
     "gently redirect with a different phrasing or approach. Limit the response to 12 words."
+    "when you return cohesive memories, do not exceed 25 words."
     )
 
 
     try:
         openai_response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt_content}],
+            messages= [{"role": "user", "content": prompt_content}],
         )
 
         # Extract the response text from OpenAI
@@ -95,7 +93,7 @@ def generatePrompt():
     return jsonify({"prompt": promptList[index]})
 
 def getBigMemory(memories):
-    prompt = f"using what you know from the users memories of one event, which are {memories}, create one cohesive memory similar to that of a journal entry that is no more than 80 words which will allow the user to fondly remember this memory. The user has Alzheimer's."
+    prompt = f"using what you know from the users memories of one event, which are {memories}, create one cohesive memory similar to that of a journal entry, but don't mention anything about memory failing, that is no more than 80 words which will allow the user to fondly remember this memory. The user has Alzheimer's."
 
     try:
         openai_response = openai.ChatCompletion.create(
@@ -118,14 +116,27 @@ def chat():
     memories.append(user_input)
     print(memories)
 
-    if len(memories)%10 == 0:
-        bigMemory = getBigMemory(memories)
+    if len(memories) % 5 == 0:
+            bigMemory = getBigMemory(memories)
+            print("Cohesive Memory:", bigMemory)
+
+            # Optionally, save the big memory to the list as a special entry
+            bigMemories.append(f"Cohesive Memory: {bigMemory}")
+            print(bigMemories)
+
+            memories.clear()
+            conversationHistory.clear()  # Reset the conversation history as well
+            return jsonify({'response': bigMemory})
 
     response = answerUser(user_input)
     print(response)
 
     return jsonify({'response': response})
-    
+
+@app.route('/api/get-memories', methods=['GET'])
+def get_memories():
+    return jsonify({'memories': memories})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
